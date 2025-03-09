@@ -7,7 +7,7 @@ const GUARDIAN_API_KEY =
   process.env.NEXT_PUBLIC_GUARDIAN_API_KEY ||
   "2377d327-0f16-42a6-abfc-43d771e53f7f";
 const NYT_API_KEY =
-  process.env.NEXT_PUBLIC_NYT_API_KEY || "7d0e4c9494374e7ca378eed0a137597e";
+  process.env.NEXT_PUBLIC_NYT_API_KEY || "exFDZVtRysle714M4YUG5W7vPbzbIa9J";
 
 // Helper to format articles from different sources into a common format
 function formatArticle(article: any, source: string): Article {
