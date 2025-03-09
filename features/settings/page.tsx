@@ -28,7 +28,8 @@ export default function SettingsPage() {
   const {
     control,
     handleSubmit,
-    formState: { isDirty },
+    formState: { isDirty, errors },
+    setError,
   } = useForm<SettingsFormValues>({
     defaultValues: {
       sources: preferences.sources,
@@ -37,13 +38,18 @@ export default function SettingsPage() {
   });
 
   const onSubmit = (data: SettingsFormValues) => {
+    if (!data.categories.length) {
+      setError("categories", {
+        message: "You must select at least one category",
+      });
+      return;
+    }
     updatePreferences(data);
     toast({
       title: "Preferences saved",
       description: "Your news feed preferences have been updated.",
     });
   };
-
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold mb-8">Personalize Your News</h1>
@@ -99,34 +105,42 @@ export default function SettingsPage() {
                   personalized feed
                 </CardDescription>
               </CardHeader>
-              <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {categories.map((category, idx) => (
-                  <div
-                    key={category.id}
-                    className="flex items-center space-x-2"
-                  >
-                    <Controller
-                      name="categories"
-                      control={control}
-                      render={({ field }) => (
-                        <Switch
-                          disabled={idx === 0}
-                          id={`category-${category.id}`}
-                          checked={field.value.includes(category.id)}
-                          onCheckedChange={(checked) => {
-                            const updatedCategories = checked
-                              ? [...field.value, category.id]
-                              : field.value.filter((id) => id !== category.id);
-                            field.onChange(updatedCategories);
-                          }}
-                        />
-                      )}
-                    />
-                    <Label htmlFor={`category-${category.id}`}>
-                      {category.name}
-                    </Label>
-                  </div>
-                ))}
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {categories.map((category, idx) => (
+                    <div
+                      key={category.id}
+                      className="flex items-center space-x-2"
+                    >
+                      <Controller
+                        name="categories"
+                        control={control}
+                        render={({ field }) => (
+                          <Switch
+                            id={`category-${category.id}`}
+                            checked={field.value.includes(category.id)}
+                            onCheckedChange={(checked) => {
+                              const updatedCategories = checked
+                                ? [...field.value, category.id]
+                                : field.value.filter(
+                                    (id) => id !== category.id
+                                  );
+                              field.onChange(updatedCategories);
+                            }}
+                          />
+                        )}
+                      />
+                      <Label htmlFor={`category-${category.id}`}>
+                        {category.name}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+                {errors.categories && (
+                  <p className="my-4 text-red-400">
+                    {errors.categories.message}
+                  </p>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
