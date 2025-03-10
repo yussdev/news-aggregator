@@ -31,7 +31,7 @@ export default function Footer() {
               Terms of Service
             </Link>
             <a
-              href="https://github.com/yourusername/newshub"
+              href="https://github.com/yussdev/news-aggregator"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm text-muted-foreground hover:text-foreground flex items-center"
